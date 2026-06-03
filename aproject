@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Roxy is the best</title>
+</head>
+<body>
+  <h1>Roxy is the best</h1>
+
+  <p id="message">Wulalalalala. Click the BUTTOM.</p>
+
+  <button onclick="changeText()">click me</button>
+
+  <script>
+    function changeText() {
+      document.getElementById("message").innerText = "I Love You XW";
+    }
+  </script>
+</body>
+</html>
