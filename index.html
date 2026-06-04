@@ -3,161 +3,189 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Agent 077 · vibe coding portfolio</title>
+  <title>Agent 077 · 玻璃呼吸</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      user-select: none; /* 提升界面质感，不影响文字复制 */
     }
 
     body {
-      background-color: #0a0c0f;
-      font-family: -apple-system, 'Helvetica Neue', 'SF Pro Text', 'SF Pro Display', system-ui, 'Segoe UI', Roboto, sans-serif;
-      color: rgba(230, 235, 240, 0.88);
+      background: #0f1115;
+      font-family: "Arial Rounded MT Bold", "Arial Rounded", "SF Pro Rounded", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-weight: 600;
       min-height: 100vh;
       overflow-x: hidden;
-      font-weight: 350;
-      letter-spacing: 0.02em;
+      letter-spacing: -0.01em;
     }
 
-    /* ========= 动态渐变背景 + 缓慢呼吸 ========= */
-    .dynamic-bg {
+    /* ========= 动态融合背景 + 浅白色混合 ========= */
+    .bg-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -2;
-      background: radial-gradient(circle at 30% 40%, #14171c, #050608);
-      animation: slowBreathing 18s ease infinite alternate;
+      z-index: -3;
+      overflow: hidden;
     }
 
-    @keyframes slowBreathing {
-      0% { opacity: 0.7; transform: scale(1); }
-      100% { opacity: 1; transform: scale(1.02); background-position: 10% 20%; }
+    .bg-blob {
+      position: absolute;
+      filter: blur(100px);
+      border-radius: 50%;
+      opacity: 0.5;
+      mix-blend-mode: screen;
+      animation: slowDrift 22s infinite alternate ease-in-out;
     }
 
-    /* 深浅融合叠加层 */
-    .gradient-overlay {
+    .blob1 {
+      width: 75vw;
+      height: 75vw;
+      background: radial-gradient(circle, #b8c4d0, #5a6b7a);
+      top: -25%;
+      left: -20%;
+      animation-duration: 24s;
+    }
+
+    .blob2 {
+      width: 65vw;
+      height: 65vw;
+      background: radial-gradient(circle, #d4c4b0, #8a7a64);
+      bottom: -30%;
+      right: -25%;
+      animation-duration: 28s;
+      animation-delay: -6s;
+    }
+
+    .blob3 {
+      width: 55vw;
+      height: 55vw;
+      background: radial-gradient(circle, #a8bcb4, #55706a);
+      top: 40%;
+      left: 30%;
+      animation-duration: 32s;
+      animation-delay: -10s;
+      opacity: 0.4;
+    }
+
+    /* 浅白色融合层 */
+    .white-mist {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -1;
-      background: radial-gradient(ellipse at 70% 60%, rgba(40, 45, 55, 0.3), rgba(5, 7, 10, 0.7));
-      backdrop-filter: blur(1px);
+      background: radial-gradient(circle at 50% 30%, rgba(245, 245, 250, 0.15), rgba(200, 205, 215, 0.05));
       pointer-events: none;
+      z-index: -2;
     }
 
-    /* 鼠标跟随光晕（炫技1） */
+    @keyframes slowDrift {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(6%, 10%) scale(1.15); }
+    }
+
+    /* 鼠标光晕 */
     .mouse-glow {
       position: fixed;
-      width: 42rem;
-      height: 42rem;
-      background: radial-gradient(circle, rgba(180, 190, 210, 0.12) 0%, rgba(100, 110, 130, 0) 70%);
+      width: 40rem;
+      height: 40rem;
+      background: radial-gradient(circle, rgba(210, 225, 245, 0.12) 0%, rgba(130, 145, 170, 0) 70%);
       border-radius: 50%;
       pointer-events: none;
       transform: translate(-50%, -50%);
-      transition: transform 0.08s ease-out;
-      z-index: 999;
-      will-change: left, top;
-      mix-blend-mode: soft-light;
+      transition: transform 0.04s linear;
+      z-index: 980;
+      mix-blend-mode: plus-lighter;
     }
 
     /* 主容器 */
-    .container {
+    .main {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 2rem 2rem 4rem;
-      position: relative;
+      padding: 3rem 2rem 5rem;
     }
 
-    /* 首页核心 - 极致克制 */
     .hero {
       text-align: center;
-      backdrop-filter: blur(2px);
-      padding: 2rem 1.5rem;
-      border-radius: 56px;
-      transition: all 0.3s ease;
+      backdrop-filter: blur(12px);
+      background: rgba(20, 28, 36, 0.2);
+      border-radius: 80px;
+      padding: 2rem 2.5rem;
+      border: 0.5px solid rgba(255, 255, 245, 0.15);
     }
 
     .agent {
-      font-size: clamp(3rem, 10vw, 5.5rem);
-      font-weight: 500;
+      font-size: clamp(3.5rem, 12vw, 6rem);
+      font-weight: 700;
       letter-spacing: -0.02em;
-      background: linear-gradient(135deg, rgba(245, 245, 250, 0.95), rgba(180, 190, 205, 0.7));
+      background: linear-gradient(135deg, #f8fafd 0%, #c5ccd6 70%);
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
-      margin-bottom: 0.6rem;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-shadow: 0 2px 20px rgba(255, 255, 255, 0.15);
     }
 
     .tagline {
-      font-size: clamp(1rem, 4vw, 1.5rem);
-      font-weight: 380;
-      color: rgba(210, 220, 230, 0.7);
-      letter-spacing: 0.3px;
-      backdrop-filter: blur(5px);
-      background: rgba(20, 24, 30, 0.2);
+      font-size: clamp(1.1rem, 4vw, 1.65rem);
+      font-weight: 600;
+      color: rgba(240, 245, 252, 0.85);
+      background: rgba(30, 40, 52, 0.35);
+      backdrop-filter: blur(8px);
       display: inline-block;
-      padding: 0.4rem 1.2rem;
+      padding: 0.5rem 1.8rem;
       border-radius: 60px;
+      margin-top: 0.9rem;
+      letter-spacing: 0.3px;
     }
 
-    /* 菜单按钮 - iOS 圆弧感 */
+    /* 菜单按钮 */
     .menu-btn {
       position: fixed;
       top: 32px;
       right: 28px;
-      width: 52px;
-      height: 52px;
-      background: rgba(25, 30, 35, 0.55);
-      backdrop-filter: blur(14px);
-      border-radius: 32px;
+      width: 56px;
+      height: 56px;
+      background: rgba(40, 50, 62, 0.55);
+      backdrop-filter: blur(20px);
+      border-radius: 38px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       z-index: 1100;
-      transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-      border: 0.5px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    }
-
-    .menu-btn:hover {
-      background: rgba(50, 60, 70, 0.8);
-      transform: scale(0.96);
+      border: 0.8px solid rgba(255, 255, 250, 0.25);
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     }
 
     .menu-btn span {
-      font-size: 28px;
-      font-weight: 300;
-      color: rgba(240, 245, 250, 0.9);
+      font-size: 34px;
+      font-weight: 400;
+      color: #f0f4fc;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
     }
 
-    /* 抽屉菜单 - 毛玻璃 + 禁止背景滚动（炫技3） */
+    /* 抽屉菜单 */
     .drawer {
       position: fixed;
       top: 0;
       right: -100%;
       width: 100%;
-      max-width: 460px;
+      max-width: 540px;
       height: 100vh;
-      background: rgba(15, 18, 22, 0.82);
-      backdrop-filter: blur(28px);
+      background: rgba(12, 16, 24, 0.82);
+      backdrop-filter: blur(36px);
       z-index: 1200;
-      transition: right 0.55s cubic-bezier(0.2, 0.9, 0.3, 1);
-      box-shadow: -8px 0 30px rgba(0, 0, 0, 0.5);
-      border-left: 0.8px solid rgba(255, 255, 255, 0.15);
+      transition: right 0.55s cubic-bezier(0.2, 0.95, 0.3, 1);
+      border-left: 0.8px solid rgba(255, 255, 245, 0.2);
       overflow-y: auto;
-      padding: 2rem 1.8rem;
+      padding: 2rem 2rem;
       scrollbar-width: thin;
     }
 
@@ -169,275 +197,228 @@
       position: absolute;
       top: 28px;
       right: 28px;
-      font-size: 32px;
-      background: rgba(255,255,240,0.1);
-      width: 44px;
-      height: 44px;
-      border-radius: 30px;
+      font-size: 28px;
+      background: rgba(255, 255, 245, 0.1);
+      width: 46px;
+      height: 46px;
+      border-radius: 34px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       backdrop-filter: blur(8px);
+      color: #eef2f8;
     }
 
     .menu-section {
-      margin-top: 56px;
-      margin-bottom: 42px;
+      margin-top: 60px;
+      margin-bottom: 52px;
     }
 
     .menu-section-title {
-      font-size: 1rem;
+      font-size: 0.85rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 2.5px;
-      font-weight: 460;
-      color: rgba(190, 200, 215, 0.65);
-      margin-bottom: 1.2rem;
-      border-left: 3px solid rgba(210, 220, 240, 0.5);
+      letter-spacing: 3px;
+      color: rgba(200, 215, 235, 0.75);
+      margin-bottom: 1.5rem;
+      border-left: 3px solid rgba(210, 225, 250, 0.7);
       padding-left: 14px;
     }
 
-    /* Gallery 横滑区域 3:5 卡片 */
+    /* Gallery */
     .gallery-scroll {
       display: flex;
       overflow-x: auto;
-      gap: 1.2rem;
+      gap: 1.6rem;
       scroll-snap-type: x mandatory;
-      padding-bottom: 1rem;
-      margin-bottom: 0.6rem;
+      scroll-behavior: smooth;
+      padding-bottom: 0.8rem;
+      cursor: grab;
     }
-
+    .gallery-scroll.dragging {
+      cursor: grabbing;
+      scroll-behavior: auto;
+    }
     .gallery-scroll::-webkit-scrollbar {
       height: 4px;
     }
     .gallery-scroll::-webkit-scrollbar-track {
-      background: rgba(80,90,110,0.2);
+      background: rgba(100, 115, 135, 0.2);
       border-radius: 10px;
     }
     .gallery-scroll::-webkit-scrollbar-thumb {
-      background: rgba(180,190,210,0.5);
+      background: rgba(180, 195, 220, 0.5);
       border-radius: 10px;
     }
-
     .gallery-card {
       flex: 0 0 auto;
-      width: 210px;
       scroll-snap-align: start;
       border-radius: 28px;
-      overflow: hidden;
-      background: rgba(0,0,0,0.25);
-      backdrop-filter: blur(3px);
-      transition: transform 0.2s ease;
-    }
-
-    .gallery-card img {
-      width: 100%;
-      aspect-ratio: 3 / 5;
-      object-fit: cover;
-      display: block;
-      transition: 0.3s;
-    }
-
-    .gallery-card:hover {
-      transform: translateY(-6px);
-    }
-
-    .photo-id {
-      text-align: center;
-      font-size: 0.7rem;
-      letter-spacing: 1px;
-      padding: 8px 0;
-      color: rgba(200,210,230,0.7);
-      background: rgba(10,12,18,0.5);
+      background: rgba(20, 26, 34, 0.3);
       backdrop-filter: blur(4px);
+      transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+    .gallery-card:hover {
+      transform: scale(1.02);
+    }
+    .gallery-card img {
+      height: 280px;
+      width: auto;
+      max-width: 340px;
+      object-fit: contain;
+      border-radius: 24px;
+      display: block;
+      pointer-events: none;
     }
 
-    /* Find Me 简洁链接 */
+    /* Find Me */
     .find-links {
       display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
+      gap: 1rem;
     }
     .find-link {
-      background: rgba(30,36,44,0.6);
-      backdrop-filter: blur(12px);
-      padding: 0.7rem 1.6rem;
-      border-radius: 48px;
+      background: rgba(55, 70, 88, 0.7);
+      backdrop-filter: blur(16px);
+      padding: 0.8rem 2rem;
+      border-radius: 52px;
       text-decoration: none;
-      color: rgba(235,240,250,0.9);
-      font-weight: 450;
+      color: #f0f5fe;
+      font-weight: 650;
+      font-size: 1rem;
       transition: 0.2s;
-      border: 0.5px solid rgba(255,255,245,0.2);
-    }
-    .find-link:hover {
-      background: rgba(80, 95, 115, 0.7);
-      color: white;
+      border: 0.6px solid rgba(255, 255, 240, 0.25);
+      letter-spacing: 0.3px;
     }
 
-    /* 气泡世界 ======= My Footage + Live For 呼吸漂浮 */
+    /* 呼吸气泡 */
     .bubble-world {
       display: flex;
       flex-wrap: wrap;
-      gap: 1rem 1.2rem;
-      margin-top: 1rem;
-      position: relative;
+      gap: 1rem 1.3rem;
     }
-
     .bubble {
-      background: rgba(35, 42, 52, 0.5);
-      backdrop-filter: blur(12px);
-      padding: 0.6rem 1.4rem;
-      border-radius: 120px;
-      font-size: 0.9rem;
-      font-weight: 430;
-      border: 0.8px solid rgba(255,255,245,0.18);
-      color: rgba(225, 232, 245, 0.92);
-      transition: all 0.25s ease;
-      animation: floatSoft 4s infinite ease-in-out;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.2);
-    }
-
-    .bubble-large {
-      background: rgba(55, 68, 85, 0.6);
+      background: rgba(60, 78, 98, 0.55);
       backdrop-filter: blur(16px);
-      padding: 0.9rem 1.9rem;
-      border-radius: 100px;
-      font-size: 1.05rem;
-      font-weight: 480;
-      animation: floatSoft 5s infinite alternate;
+      padding: 0.75rem 1.6rem;
+      border-radius: 120px;
+      font-weight: 620;
+      font-size: 0.95rem;
+      border: 0.8px solid rgba(255, 250, 240, 0.25);
+      transition: all 0.35s cubic-bezier(0.2, 1.1, 0.4, 1);
+      animation: glassBreathe 4s infinite alternate ease-in-out;
+      cursor: default;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
-
+    .bubble-large {
+      background: rgba(85, 108, 132, 0.75);
+      padding: 1rem 2rem;
+      font-weight: 700;
+      font-size: 1.05rem;
+      animation: glassBreathe 5.5s infinite alternate;
+    }
     .school-sub {
       font-size: 0.7rem;
-      font-weight: 350;
+      font-weight: 550;
       display: block;
       margin-top: 6px;
-      letter-spacing: 0.3px;
-      color: rgba(200,215,235,0.7);
+      opacity: 0.85;
+      letter-spacing: 0.2px;
     }
-
-    @keyframes floatSoft {
-      0% { transform: translateY(0px); }
-      100% { transform: translateY(-5px); }
+    @keyframes glassBreathe {
+      0% {
+        transform: translateY(0px) scale(1);
+        backdrop-filter: blur(14px);
+      }
+      100% {
+        transform: translateY(-10px) scale(1.05);
+        backdrop-filter: blur(20px);
+        background: rgba(100, 125, 152, 0.7);
+      }
     }
-
     .bubble:hover {
-      transform: scale(1.02) translateY(-3px);
-      background: rgba(80, 100, 125, 0.75);
-      border-color: rgba(255,255,245,0.4);
+      background: rgba(120, 148, 175, 0.85);
+      transform: scale(1.1) translateY(-5px);
+      border-color: rgba(255, 255, 250, 0.5);
     }
 
-    .inline-chip {
-      display: inline-flex;
-      flex-wrap: wrap;
-      gap: 0.7rem;
-      margin-top: 0.6rem;
-    }
-
-    /* Now 右下角 */
     .now-corner {
       position: fixed;
-      bottom: 22px;
+      bottom: 24px;
       left: 24px;
       font-size: 0.7rem;
-      background: rgba(10, 14, 18, 0.5);
-      backdrop-filter: blur(12px);
-      padding: 6px 14px;
-      border-radius: 32px;
+      font-weight: 600;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(14px);
+      padding: 6px 18px;
+      border-radius: 44px;
       letter-spacing: 0.5px;
-      color: rgba(190, 200, 215, 0.8);
       z-index: 1000;
-      pointer-events: none;
-      font-weight: 380;
+      color: #eef3fc;
     }
 
-    /* 响应式 */
-    @media (max-width: 560px) {
-      .drawer { max-width: 100%; padding: 1.5rem; }
-      .gallery-card { width: 160px; }
-      .bubble { font-size: 0.75rem; padding: 0.4rem 1rem; }
-      .bubble-large { padding: 0.6rem 1.2rem; }
+    @media (max-width: 640px) {
+      .gallery-card img { height: 200px; }
+      .drawer { padding: 1.5rem; }
+      .bubble { font-size: 0.8rem; padding: 0.55rem 1.2rem; }
     }
-
-    /* 防止滚动穿透 */
-    body.no-scroll {
-      overflow: hidden;
-    }
+    body.no-scroll { overflow: hidden; }
   </style>
 </head>
 <body>
 
-<div class="dynamic-bg"></div>
-<div class="gradient-overlay"></div>
+<div class="bg-container">
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+  <div class="bg-blob blob3"></div>
+</div>
+<div class="white-mist"></div>
 <div class="mouse-glow" id="mouseGlow"></div>
 
-<div class="container">
+<div class="main">
   <div class="hero">
     <div class="agent">Agent 077</div>
     <div class="tagline">exploring the universe...</div>
   </div>
 </div>
 
-<div class="menu-btn" id="menuBtn">
-  <span>☰</span>
-</div>
+<div class="menu-btn" id="menuBtn"><span>☰</span></div>
 
-<!-- 抽屉菜单 -->
 <div class="drawer" id="drawer">
   <div class="drawer-close" id="closeDrawer">✕</div>
 
-  <!-- GALLERY -->
   <div class="menu-section">
     <div class="menu-section-title">Gallery</div>
-    <div class="gallery-scroll" id="galleryScroll">
-      <!-- 动态js生成 10张 3:5 照片占位，但是会读取真实图片，若没有则展示优雅占位 -->
-    </div>
+    <div class="gallery-scroll" id="galleryScroll"></div>
   </div>
 
-  <!-- FIND ME -->
   <div class="menu-section">
     <div class="menu-section-title">Find Me</div>
     <div class="find-links">
       <a href="https://www.instagram.com/roxie_eix" target="_blank" class="find-link">IG / roxie_eix</a>
-      <a href="https://github.com/rooci077" target="_blank" class="find-link">GitHub / rooci077</a>
     </div>
   </div>
 
-  <!-- MY FOOTAGE (地理气泡) -->
   <div class="menu-section">
     <div class="menu-section-title">My Footage</div>
     <div class="bubble-world">
-      <!-- 主气泡 New York & Seattle -->
-      <div class="bubble-large">
-        New York <span class="school-sub">Columbia University</span>
-      </div>
-      <div class="bubble-large">
-        Seattle <span class="school-sub">UW</span>
-      </div>
-      <!-- 周边城市气泡 -->
-      <div class="bubble">Las Vegas, NV</div>
-      <div class="bubble">Orlando, FL</div>
-      <div class="bubble">Los Angeles, CA</div>
-      <div class="bubble">Portland, OR</div>
-      <div class="bubble">Page, AZ</div>
-      <div class="bubble">Fairbanks, AK</div>
-      <!-- 国家+城市 -->
+      <div class="bubble-large">New York <span class="school-sub">Columbia University</span></div>
+      <div class="bubble-large">Seattle <span class="school-sub">University of Washington</span></div>
+      <div class="bubble">Las Vegas, NV</div><div class="bubble">Orlando, FL</div>
+      <div class="bubble">Los Angeles, CA</div><div class="bubble">Portland, OR</div>
+      <div class="bubble">Page, AZ</div><div class="bubble">Fairbanks, AK</div>
       <div class="bubble">🇨🇷 Costa Rica · La Fortuna & Monteverde</div>
-      <div class="bubble">🇰🇪 Kenya · Nairobi</div>
-      <div class="bubble">🇦🇪 UAE · Dubai</div>
+      <div class="bubble">🇰🇪 Kenya · Nairobi</div><div class="bubble">🇦🇪 UAE · Dubai</div>
     </div>
   </div>
 
-  <!-- LIVE FOR / MY JAM -->
   <div class="menu-section">
     <div class="menu-section-title">live for / my jam</div>
     <div class="bubble-world">
-      <div class="bubble">🎧 R&B</div>
-      <div class="bubble">🎙️ Soul</div>
-      <div class="bubble">🎤 Hiphop</div>
-      <div class="bubble">🏸 Badminton</div>
-      <div class="bubble">⛳ Golf</div>
-      <div class="bubble">📸 Capturing moments</div>
+      <div class="bubble">🎧 R&B</div><div class="bubble">🎙️ Soul</div>
+      <div class="bubble">🎤 Hiphop</div><div class="bubble">🏸 Badminton</div>
+      <div class="bubble">⛳ Golf</div><div class="bubble">📸 Capturing moments</div>
     </div>
   </div>
 </div>
@@ -445,165 +426,139 @@
 <div class="now-corner">⚡ currently vibe coding this</div>
 
 <script>
-  // 炫技2: 文字湿度感已融入全局配色和毛玻璃
-  // 炫技1: 鼠标跟随光晕
+  // 鼠标光晕
   const glow = document.getElementById('mouseGlow');
   document.addEventListener('mousemove', (e) => {
     glow.style.left = e.clientX + 'px';
     glow.style.top = e.clientY + 'px';
   });
 
-  // 菜单交互：禁止滚动 + 背景模糊 (已在drawer中实现毛玻璃, 额外加body锁定)
+  // 菜单逻辑
   const menuBtn = document.getElementById('menuBtn');
   const drawer = document.getElementById('drawer');
-  const closeDrawerBtn = document.getElementById('closeDrawer');
-
-  function openDrawer() {
-    drawer.classList.add('open');
-    document.body.classList.add('no-scroll');
-  }
-  function closeDrawerFunc() {
-    drawer.classList.remove('open');
-    document.body.classList.remove('no-scroll');
-  }
+  const closeDrawer = document.getElementById('closeDrawer');
+  function openDrawer() { drawer.classList.add('open'); document.body.classList.add('no-scroll'); }
+  function closeDrawerFunc() { drawer.classList.remove('open'); document.body.classList.remove('no-scroll'); }
   menuBtn.addEventListener('click', openDrawer);
-  closeDrawerBtn.addEventListener('click', closeDrawerFunc);
-  drawer.addEventListener('click', (e) => {
-    if(e.target === drawer) closeDrawerFunc();
-  });
+  closeDrawer.addEventListener('click', closeDrawerFunc);
+  drawer.addEventListener('click', (e) => { if(e.target === drawer) closeDrawerFunc(); });
 
-  // Gallery 图片自动加载 —— 10张 3:5 暗调示例 + 优雅降级（如果用户本地未传图，用渐变placeholder展现同样质感，并提示加照片）
-  // 用户只需要在仓库根目录创建 gallery 文件夹，放入 001.jpg ~ 010.jpg
-  // 代码自动尝试加载，若图片404则显示平滑占位符合暗调氛围
+  // Gallery: 加载图片 - 支持多种路径格式
   const galleryContainer = document.getElementById('galleryScroll');
-  const totalPhotos = 10;
+  const photoCount = 8;
+  let loadedCount = 0;
   
-  function createGalleryCard(index) {
+  // 尝试多种可能的路径
+  function tryLoadImage(img, paths, index) {
+    let pathIndex = 0;
+    
+    function tryNextPath() {
+      if (pathIndex >= paths.length) {
+        // 所有路径都失败了，显示优雅的玻璃占位
+        img.style.background = 'linear-gradient(145deg, #2a3440, #181e26)';
+        img.style.minWidth = '180px';
+        img.style.height = '280px';
+        img.style.objectFit = 'cover';
+        img.alt = `Photo ${index}`;
+        console.log(`❌ 图片 ${index} 加载失败，尝试了所有路径`);
+        return;
+      }
+      
+      const currentPath = paths[pathIndex];
+      img.src = currentPath;
+      console.log(`尝试加载图片 ${index}: ${currentPath}`);
+      
+      img.onload = () => {
+        console.log(`✅ 图片 ${index} 加载成功: ${currentPath}`);
+        img.style.background = 'none';
+      };
+      
+      img.onerror = () => {
+        pathIndex++;
+        tryNextPath();
+      };
+    }
+    
+    tryNextPath();
+  }
+  
+  for(let i = 1; i <= photoCount; i++) {
     const card = document.createElement('div');
     card.className = 'gallery-card';
     const img = document.createElement('img');
-    const photoNumber = String(index).padStart(3, '0');
-    // 使用相对路径 gallery/001.jpg 风格，完全兼容 github pages
-    img.src = `gallery/${photoNumber}.jpg`;
-    img.alt = `暗调作品 ${photoNumber}`;
-    // 图片加载失败时 优雅占位符（体现审美，不破坏氛围）
-    img.onerror = () => {
-      img.src = '';
-      img.style.background = 'linear-gradient(145deg, #1f252e, #11161c)';
-      img.style.objectFit = 'cover';
-      // 绘制编号文字简单占位 (通过伪类不可控，直接显示div文本层)
-      img.style.display = 'flex';
-      img.style.alignItems = 'center';
-      img.style.justifyContent = 'center';
-      // 设置失败后生成一个优雅fallback文本
-      if(!img.parentNode.querySelector('.fallback-num')) {
-        const fallbackSpan = document.createElement('div');
-        fallbackSpan.className = 'photo-id';
-        fallbackSpan.innerText = `No.${photoNumber}`;
-        fallbackSpan.style.position = 'relative';
-        fallbackSpan.style.marginTop = '-2px';
-        fallbackSpan.style.background = 'rgba(10,14,20,0.7)';
-        // 如果已存在则不再重复添加
-        if(!card.querySelector('.fallback-num-style')) {
-          const customSpan = document.createElement('div');
-          customSpan.className = 'photo-id fallback-num-style';
-          customSpan.innerText = `No.${photoNumber} · pending`;
-          customSpan.style.background = 'rgba(30,35,45,0.8)';
-          customSpan.style.fontSize = '0.7rem';
-          card.appendChild(customSpan);
-        }
-      }
-    };
-    img.onload = () => {
-      // 图片加载成功则底部加编号
-      const idDiv = document.createElement('div');
-      idDiv.className = 'photo-id';
-      idDiv.innerText = `No.${photoNumber}`;
-      card.appendChild(idDiv);
-    };
+    
+    // 多种可能的路径（按优先级排序）
+    const possiblePaths = [
+      `gallery/${i}.jpg`,
+      `gallery/${i}.jpeg`,
+      `gallery/${i}.png`,
+      `gallery/${i}.JPG`,
+      `gallery/${i}.webp`,
+      `./gallery/${i}.jpg`,
+      `./gallery/${i}.jpeg`,
+      `./gallery/${i}.png`,
+      `/gallery/${i}.jpg`,
+      `gallery/0${i}.jpg`,
+      `gallery/img_${i}.jpg`,
+      `gallery/photo${i}.jpg`
+    ];
+    
+    img.alt = `Photo ${i}`;
+    tryLoadImage(img, possiblePaths, i);
+    
     card.appendChild(img);
-    return card;
-  }
-  
-  // 为了防止重复添加，一次性构建所有卡片（如果图片加载成功，后续依然附上编号）
-  for(let i=1; i<=totalPhotos; i++) {
-    const card = createGalleryCard(i);
     galleryContainer.appendChild(card);
   }
   
-  // 补充如果有的卡片图片load之后没有编号？因为onload异步但可能会漏，进行二次确保
-  // 优雅保证每个卡片最终都有编号（在图片加载后编号或者默认已有备用）
-  setTimeout(() => {
-    const allCards = document.querySelectorAll('.gallery-card');
-    allCards.forEach((card, idx) => {
-      if(!card.querySelector('.photo-id')) {
-        const pid = document.createElement('div');
-        pid.className = 'photo-id';
-        const numIdx = idx+1;
-        pid.innerText = `No.${String(numIdx).padStart(3,'0')}`;
-        card.appendChild(pid);
+  // Gallery 悬停停止滚动 + 自动缓速滚动
+  let autoScrollInterval = null;
+  const gallery = document.querySelector('.gallery-scroll');
+  
+  function startAutoScroll() {
+    if(autoScrollInterval) clearInterval(autoScrollInterval);
+    autoScrollInterval = setInterval(() => {
+      if(gallery && !gallery.matches(':hover') && !drawer.classList.contains('open')) {
+        const maxScroll = gallery.scrollWidth - gallery.clientWidth;
+        if(gallery.scrollLeft + 10 >= maxScroll) {
+          gallery.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          gallery.scrollBy({ left: 300, behavior: 'smooth' });
+        }
       }
-    });
-  }, 200);
-  
-  // 炫技额外点：增加hover时轻微光影，而且滚动画廊流畅
-  // 完全满足: 相同比例3:5, pc端显6张左右，每行自适应滚动
-  
-  // 确保所有气泡悬停漂浮 + 活力度 (已实现)
-  
-  // 附加小细节：点击任意外部避免冲突，而且光晕在移动端不干扰
-  if(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    glow.style.display = 'none';
+    }, 4000);
   }
   
-  // 实现背景融合字体: 整体文字半透明融合，通过背景模糊和半透叠加满足需求，整个CSS以低饱和度柔和暗调为主
-  // 最后确保 My Footage 中显示学校名称, 已经嵌入 bubble-large 下方
-  // 确保"悬浮bubble"中的内容包含: Las Vegas, Orlando, LA, Portland, Page, Fairbanks 和 哥斯达黎加,肯尼亚,迪拜
-  // 已全部显式列出，完全符合
+  gallery.addEventListener('mouseenter', () => {
+    if(autoScrollInterval) clearInterval(autoScrollInterval);
+    autoScrollInterval = null;
+  });
+  gallery.addEventListener('mouseleave', () => {
+    startAutoScroll();
+  });
   
-  // 另外将 Education 转换为 My Footage并用地理位置表示，完美
-  // 并且将联系方式改为Find Me, 全英文, 菜单结构正确
-  // 添加一个细节: 为每个bubble增加不同浮动延迟增加呼吸感
+  startAutoScroll();
+  
+  // 差异化气泡呼吸节奏
   const bubbles = document.querySelectorAll('.bubble, .bubble-large');
-  bubbles.forEach((bub, idx) => {
-    const duration = 3 + (idx % 4);
-    const delay = (idx * 0.2) % 2;
-    bub.style.animation = `floatSoft ${duration}s infinite ease-in-out`;
-    bub.style.animationDelay = `${delay}s`;
+  bubbles.forEach((b, idx) => {
+    const duration = 3.5 + (idx % 4) * 0.6;
+    const delay = (idx * 0.18) % 2.2;
+    b.style.animation = `glassBreathe ${duration}s infinite alternate cubic-bezier(0.33, 1.2, 0.4, 1)`;
+    b.style.animationDelay = `${delay}s`;
   });
   
-  // 细节修正: 加一段代码以防某些浏览器在打开菜单时背景滚动穿透，我们已有no-scroll类
-  window.addEventListener('resize', () => {
-    if(drawer.classList.contains('open')) {
-      document.body.classList.add('no-scroll');
-    } else {
-      document.body.classList.remove('no-scroll');
-    }
-  });
+  // 移动端禁用鼠标光晕
+  if(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    const mouseGlow = document.querySelector('.mouse-glow');
+    if(mouseGlow) mouseGlow.style.display = 'none';
+  }
   
-  // 最后：鼠标光晕在drawer之上太突出，提升drawer层级更高但没有影响光晕美观，无伤大雅
-  
-  // 按照要求: gallery中展示用户照片引导: 我们在页面控制台友好提醒添加照片方法但不干扰体验。
-  console.log('✨ Agent 077 · vibe portfolio ready | 请将10张3:5照片放入 /gallery 文件夹，命名为001.jpg~010.jpg');
-  
-  // 为了体现“vibecoding”能力以及完全性: 增加一个微妙的文字阴影实时跟随背景光，即满足"湿度感"
-  // 以及 菜单打开时自动背景模糊（drawer自带blur背景）已经满足禁用滚动。
-  // 确保 Gallery 滑动且每张3:5比例, 照片自适应 , "并列滑动页面中间", 默认滚动条隐藏优雅。
-  // 完美符合所有点: 签名 exploring the universe... 菜单包含Gallery, Find Me, My Footage(主气泡New York&Seattle+学校+周边悬浮及国家气泡)，Live For/my jam爱好。
-  // 所有炫技: 鼠标光晕,湿度文字,背景模糊与禁止滚动,照片悬停编号,右下角Now，完全拥有。
-  
-  // 附加最终验证 "Las vegas, Orlando, LA, Portland, Page, Fairbanks，以及Costa Rica, Kenya Nairobi, Dubai" 全部在My Footage板块展示
-  // 气泡浮动在不同速度，呼吸感完美
-  // 学历已经用My footage涵盖地理/学校信息（纽约哥大/西雅图华大）
-  // 技能: Stata R Vibecoding 放在live for里？不，需求中技能展示独立？上一轮明确指出6技能 Stata R Vibecoding爱好已分开，已在 live for 以外增加显示技能区域？
-  // 根据最终确认“保留之前所有提及”但用户最新大纲中: 6:技能 Stata R Vibecoding，7爱好。用户最终菜单结构无单独技能模块，但已经在live for 以外额外再补充技能区域显得画蛇添足？可在My Footage下面新增微量“toolkit”，但不违背最终需求。
-  // 为确保技能完全展示且不破坏极简高级，增加一个极小优雅的技能chips放在live for 之前
-  const skillSection = document.createElement('div');
-  skillSection.className = 'menu-section';
-  skillSection.innerHTML = `<div class="menu-section-title">toolkit</div><div class="inline-chip"><span class="bubble" style="animation:none; background:rgba(45,55,70,0.6);">Stata</span><span class="bubble" style="animation:none;">R</span><span class="bubble" style="animation:none;">Vibecoding</span></div>`;
-  const drawerMenu = document.querySelector('.drawer');
-  const liveForSection = document.querySelector('.menu-section:last-child');
-  drawerMenu.insertBefore(skillSection, liveForSection);
+  // 控制台输出帮助信息
+  console.log('🔍 图片加载说明：');
+  console.log('📁 请确保 gallery 文件夹与 index.html 在同一目录');
+  console.log('📷 图片命名格式: 1.jpg, 2.jpg, 3.jpg ... 8.jpg');
+  console.log('💡 支持格式: jpg, jpeg, png, webp, JPG');
+  console.log('✨ 如果图片仍无法显示，请检查文件名大小写和扩展名');
 </script>
 </body>
 </html>
