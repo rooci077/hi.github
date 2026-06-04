@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Agent 077 · 玻璃呼吸</title>
+  <title>Agent 077 · 流动肖像</title>
   <style>
     * {
       margin: 0;
@@ -12,7 +12,7 @@
     }
 
     body {
-      background: #0f1115;
+      background: #efeae2;  /* 基底米白，用于混合 */
       font-family: "Arial Rounded MT Bold", "Arial Rounded", "SF Pro Rounded", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       font-weight: 600;
       min-height: 100vh;
@@ -20,158 +20,144 @@
       letter-spacing: -0.01em;
     }
 
-    /* ========= 动态融合背景 + 浅白色混合 ========= */
-    .bg-container {
+    /* ========= 动态混合背景：白色+黑色+米棕 模糊流动 ========= */
+    .bg-blur-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -3;
-      overflow: hidden;
-    }
-
-    .bg-blob {
-      position: absolute;
-      filter: blur(100px);
-      border-radius: 50%;
-      opacity: 0.5;
-      mix-blend-mode: screen;
-      animation: slowDrift 22s infinite alternate ease-in-out;
-    }
-
-    .blob1 {
-      width: 75vw;
-      height: 75vw;
-      background: radial-gradient(circle, #b8c4d0, #5a6b7a);
-      top: -25%;
-      left: -20%;
-      animation-duration: 24s;
-    }
-
-    .blob2 {
-      width: 65vw;
-      height: 65vw;
-      background: radial-gradient(circle, #d4c4b0, #8a7a64);
-      bottom: -30%;
-      right: -25%;
-      animation-duration: 28s;
-      animation-delay: -6s;
-    }
-
-    .blob3 {
-      width: 55vw;
-      height: 55vw;
-      background: radial-gradient(circle, #a8bcb4, #55706a);
-      top: 40%;
-      left: 30%;
-      animation-duration: 32s;
-      animation-delay: -10s;
-      opacity: 0.4;
-    }
-
-    /* 浅白色融合层 */
-    .white-mist {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at 50% 30%, rgba(245, 245, 250, 0.15), rgba(200, 205, 215, 0.05));
-      pointer-events: none;
       z-index: -2;
+      overflow: hidden;
+      background: radial-gradient(circle at 20% 40%, #f5f0e8 0%, #d9cdb6 40%, #b8a88c 70%, #4a3e32 100%);
     }
 
-    @keyframes slowDrift {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(6%, 10%) scale(1.15); }
+    .blur-layer {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(68px);
+      background: radial-gradient(circle at 60% 70%, rgba(255, 248, 235, 0.4), rgba(30, 25, 20, 0.2));
+      mix-blend-mode: overlay;
+      pointer-events: none;
     }
 
-    /* 鼠标光晕 */
+    .moving-mist {
+      position: absolute;
+      width: 180%;
+      height: 180%;
+      top: -40%;
+      left: -40%;
+      background: radial-gradient(ellipse at 30% 40%, rgba(255,245,225,0.25), rgba(80,60,45,0.1));
+      filter: blur(70px);
+      animation: driftHaze 26s infinite alternate ease-in-out;
+      pointer-events: none;
+    }
+
+    @keyframes driftHaze {
+      0% { transform: translate(0%, 0%) scale(1); opacity: 0.5; }
+      100% { transform: translate(8%, 12%) scale(1.2); opacity: 0.8; }
+    }
+
+    /* 鼠标光晕 (轻柔) */
     .mouse-glow {
       position: fixed;
-      width: 40rem;
-      height: 40rem;
-      background: radial-gradient(circle, rgba(210, 225, 245, 0.12) 0%, rgba(130, 145, 170, 0) 70%);
+      width: 36rem;
+      height: 36rem;
+      background: radial-gradient(circle, rgba(215, 200, 180, 0.2) 0%, rgba(100, 85, 70, 0) 70%);
       border-radius: 50%;
       pointer-events: none;
       transform: translate(-50%, -50%);
       transition: transform 0.04s linear;
       z-index: 980;
-      mix-blend-mode: plus-lighter;
+      mix-blend-mode: soft-light;
     }
 
-    /* 主容器 */
+    /* 主容器 左侧入场动画 */
     .main {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      padding: 3rem 2rem 5rem;
+      padding: 3rem 4rem 5rem;
+      position: relative;
+      z-index: 2;
     }
 
     .hero {
-      text-align: center;
-      backdrop-filter: blur(12px);
-      background: rgba(20, 28, 36, 0.2);
-      border-radius: 80px;
-      padding: 2rem 2.5rem;
-      border: 0.5px solid rgba(255, 255, 245, 0.15);
+      text-align: left;
+      max-width: 850px;
     }
 
+    /* 白色字体，无玻璃框，从左侧划入 */
     .agent {
-      font-size: clamp(3.5rem, 12vw, 6rem);
+      font-size: clamp(3.8rem, 12vw, 6.8rem);
       font-weight: 700;
       letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #f8fafd 0%, #c5ccd6 70%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      text-shadow: 0 2px 20px rgba(255, 255, 255, 0.15);
+      color: white;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      opacity: 0;
+      transform: translateX(-28px);
+      animation: slideInLeft 0.85s cubic-bezier(0.2, 0.9, 0.3, 1.1) forwards;
+      margin-bottom: 0.3rem;
     }
 
     .tagline {
-      font-size: clamp(1.1rem, 4vw, 1.65rem);
+      font-size: clamp(1.3rem, 5vw, 2rem);
       font-weight: 600;
-      color: rgba(240, 245, 252, 0.85);
-      background: rgba(30, 40, 52, 0.35);
-      backdrop-filter: blur(8px);
-      display: inline-block;
-      padding: 0.5rem 1.8rem;
-      border-radius: 60px;
-      margin-top: 0.9rem;
-      letter-spacing: 0.3px;
+      color: white;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transform: translateX(-28px);
+      animation: slideInLeft 0.85s cubic-bezier(0.2, 0.9, 0.3, 1.1) 0.15s forwards;
+      letter-spacing: 0.2px;
     }
 
-    /* 菜单按钮 */
+    @keyframes slideInLeft {
+      0% {
+        opacity: 0;
+        transform: translateX(-32px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* 菜单按钮 — 透出背景，无玻璃感，暗化处理 */
     .menu-btn {
       position: fixed;
       top: 32px;
-      right: 28px;
-      width: 56px;
-      height: 56px;
-      background: rgba(40, 50, 62, 0.55);
-      backdrop-filter: blur(20px);
-      border-radius: 38px;
+      right: 32px;
+      width: 54px;
+      height: 54px;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(12px);
+      border-radius: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       z-index: 1100;
-      border: 0.8px solid rgba(255, 255, 250, 0.25);
-      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      border: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     .menu-btn span {
-      font-size: 34px;
-      font-weight: 400;
-      color: #f0f4fc;
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+      font-size: 32px;
+      font-weight: 300;
+      color: white;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
-    /* 抽屉菜单 */
+    .menu-btn:hover {
+      background: rgba(0, 0, 0, 0.35);
+      transform: scale(0.96);
+    }
+
+    /* 抽屉菜单 — 与主页相同背景混合，只是加暗 */
     .drawer {
       position: fixed;
       top: 0;
@@ -179,14 +165,15 @@
       width: 100%;
       max-width: 540px;
       height: 100vh;
-      background: rgba(12, 16, 24, 0.82);
-      backdrop-filter: blur(36px);
+      background: rgba(18, 15, 12, 0.78);
+      backdrop-filter: blur(32px);
       z-index: 1200;
       transition: right 0.55s cubic-bezier(0.2, 0.95, 0.3, 1);
-      border-left: 0.8px solid rgba(255, 255, 245, 0.2);
+      border-left: none;
       overflow-y: auto;
       padding: 2rem 2rem;
       scrollbar-width: thin;
+      box-shadow: -8px 0 40px rgba(0, 0, 0, 0.3);
     }
 
     .drawer.open {
@@ -198,7 +185,7 @@
       top: 28px;
       right: 28px;
       font-size: 28px;
-      background: rgba(255, 255, 245, 0.1);
+      background: rgba(255, 255, 240, 0.1);
       width: 46px;
       height: 46px;
       border-radius: 34px;
@@ -207,12 +194,12 @@
       justify-content: center;
       cursor: pointer;
       backdrop-filter: blur(8px);
-      color: #eef2f8;
+      color: #f0ede8;
     }
 
     .menu-section {
-      margin-top: 60px;
-      margin-bottom: 52px;
+      margin-top: 56px;
+      margin-bottom: 48px;
     }
 
     .menu-section-title {
@@ -220,44 +207,33 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 3px;
-      color: rgba(200, 215, 235, 0.75);
-      margin-bottom: 1.5rem;
-      border-left: 3px solid rgba(210, 225, 250, 0.7);
+      color: rgba(245, 240, 230, 0.8);
+      margin-bottom: 1.3rem;
+      border-left: 3px solid rgba(245, 240, 225, 0.6);
       padding-left: 14px;
     }
 
-    /* Gallery */
+    /* GALLERY — 自动滚动 + 悬停停止 + 放大，无拖动栏 */
     .gallery-scroll {
       display: flex;
       overflow-x: auto;
       gap: 1.6rem;
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
-      padding-bottom: 0.8rem;
-      cursor: grab;
-    }
-    .gallery-scroll.dragging {
-      cursor: grabbing;
-      scroll-behavior: auto;
+      padding-bottom: 0.4rem;
+      cursor: default;
+      scrollbar-width: none;  /* 隐藏滚动条 Firefox */
+      -ms-overflow-style: none;
     }
     .gallery-scroll::-webkit-scrollbar {
-      height: 4px;
-    }
-    .gallery-scroll::-webkit-scrollbar-track {
-      background: rgba(100, 115, 135, 0.2);
-      border-radius: 10px;
-    }
-    .gallery-scroll::-webkit-scrollbar-thumb {
-      background: rgba(180, 195, 220, 0.5);
-      border-radius: 10px;
+      display: none;  /* 隐藏滚动条 Chrome/Safari */
     }
     .gallery-card {
       flex: 0 0 auto;
       scroll-snap-align: start;
       border-radius: 28px;
-      background: rgba(20, 26, 34, 0.3);
-      backdrop-filter: blur(4px);
-      transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      background: transparent;
+      transition: transform 0.35s cubic-bezier(0.2, 0.95, 0.3, 1);
     }
     .gallery-card:hover {
       transform: scale(1.02);
@@ -267,113 +243,110 @@
       width: auto;
       max-width: 340px;
       object-fit: contain;
-      border-radius: 24px;
+      border-radius: 26px;
       display: block;
       pointer-events: none;
+      background: rgba(20, 18, 16, 0.2);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     }
 
-    /* Find Me */
+    /* Find Me 单一链接 */
     .find-links {
       display: flex;
       gap: 1rem;
     }
     .find-link {
-      background: rgba(55, 70, 88, 0.7);
-      backdrop-filter: blur(16px);
+      background: rgba(45, 40, 36, 0.55);
+      backdrop-filter: blur(12px);
       padding: 0.8rem 2rem;
       border-radius: 52px;
       text-decoration: none;
-      color: #f0f5fe;
+      color: #fff8f0;
       font-weight: 650;
       font-size: 1rem;
       transition: 0.2s;
-      border: 0.6px solid rgba(255, 255, 240, 0.25);
+      border: none;
       letter-spacing: 0.3px;
     }
 
-    /* 呼吸气泡 */
+    /* 全新气泡 — 透出背景的模糊文本框，无边框，轻盈呼吸 */
     .bubble-world {
       display: flex;
       flex-wrap: wrap;
       gap: 1rem 1.3rem;
     }
     .bubble {
-      background: rgba(60, 78, 98, 0.55);
+      background: rgba(245, 240, 230, 0.22);
       backdrop-filter: blur(16px);
-      padding: 0.75rem 1.6rem;
-      border-radius: 120px;
+      padding: 0.7rem 1.6rem;
+      border-radius: 80px;
       font-weight: 620;
-      font-size: 0.95rem;
-      border: 0.8px solid rgba(255, 250, 240, 0.25);
+      font-size: 0.92rem;
+      border: none;
       transition: all 0.35s cubic-bezier(0.2, 1.1, 0.4, 1);
-      animation: glassBreathe 4s infinite alternate ease-in-out;
+      animation: softFloat 4.2s infinite alternate ease-in-out;
       cursor: default;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      box-shadow: none;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      color: #fffaf2;
     }
     .bubble-large {
-      background: rgba(85, 108, 132, 0.75);
-      padding: 1rem 2rem;
+      background: rgba(245, 240, 230, 0.3);
+      backdrop-filter: blur(20px);
+      padding: 0.9rem 2rem;
       font-weight: 700;
-      font-size: 1.05rem;
-      animation: glassBreathe 5.5s infinite alternate;
+      font-size: 1rem;
+      animation: softFloat 5.2s infinite alternate;
+      border: none;
+      color: white;
     }
     .school-sub {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 550;
       display: block;
-      margin-top: 6px;
+      margin-top: 5px;
       opacity: 0.85;
       letter-spacing: 0.2px;
+      color: #fff3e6;
     }
-    @keyframes glassBreathe {
+
+    @keyframes softFloat {
       0% {
         transform: translateY(0px) scale(1);
         backdrop-filter: blur(14px);
       }
       100% {
-        transform: translateY(-10px) scale(1.05);
-        backdrop-filter: blur(20px);
-        background: rgba(100, 125, 152, 0.7);
+        transform: translateY(-8px) scale(1.02);
+        backdrop-filter: blur(22px);
+        background: rgba(255, 250, 240, 0.35);
       }
     }
+
     .bubble:hover {
-      background: rgba(120, 148, 175, 0.85);
-      transform: scale(1.1) translateY(-5px);
-      border-color: rgba(255, 255, 250, 0.5);
+      background: rgba(245, 240, 230, 0.45);
+      transform: scale(1.05) translateY(-5px);
     }
 
+    /* 去除右下角 now 文字 */
     .now-corner {
-      position: fixed;
-      bottom: 24px;
-      left: 24px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      background: rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(14px);
-      padding: 6px 18px;
-      border-radius: 44px;
-      letter-spacing: 0.5px;
-      z-index: 1000;
-      color: #eef3fc;
+      display: none;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 680px) {
+      .main { padding: 2rem 1.8rem; }
       .gallery-card img { height: 200px; }
       .drawer { padding: 1.5rem; }
-      .bubble { font-size: 0.8rem; padding: 0.55rem 1.2rem; }
+      .bubble { font-size: 0.78rem; padding: 0.5rem 1.2rem; }
     }
     body.no-scroll { overflow: hidden; }
   </style>
 </head>
 <body>
 
-<div class="bg-container">
-  <div class="bg-blob blob1"></div>
-  <div class="bg-blob blob2"></div>
-  <div class="bg-blob blob3"></div>
+<div class="bg-blur-container">
+  <div class="moving-mist"></div>
+  <div class="blur-layer"></div>
 </div>
-<div class="white-mist"></div>
 <div class="mouse-glow" id="mouseGlow"></div>
 
 <div class="main">
@@ -388,11 +361,13 @@
 <div class="drawer" id="drawer">
   <div class="drawer-close" id="closeDrawer">✕</div>
 
+  <!-- Gallery 纯照片滚动，无文字 -->
   <div class="menu-section">
     <div class="menu-section-title">Gallery</div>
     <div class="gallery-scroll" id="galleryScroll"></div>
   </div>
 
+  <!-- Find Me 仅保留 IG -->
   <div class="menu-section">
     <div class="menu-section-title">Find Me</div>
     <div class="find-links">
@@ -400,6 +375,7 @@
     </div>
   </div>
 
+  <!-- My Footage 气泡透背景无边框 -->
   <div class="menu-section">
     <div class="menu-section-title">My Footage</div>
     <div class="bubble-world">
@@ -413,8 +389,9 @@
     </div>
   </div>
 
+  <!-- live for (去除 my jam) 仅保留“live for” -->
   <div class="menu-section">
-    <div class="menu-section-title">live for / my jam</div>
+    <div class="menu-section-title">live for</div>
     <div class="bubble-world">
       <div class="bubble">🎧 R&B</div><div class="bubble">🎙️ Soul</div>
       <div class="bubble">🎤 Hiphop</div><div class="bubble">🏸 Badminton</div>
@@ -422,8 +399,6 @@
     </div>
   </div>
 </div>
-
-<div class="now-corner">⚡ currently vibe coding this</div>
 
 <script>
   // 鼠标光晕
@@ -433,7 +408,7 @@
     glow.style.top = e.clientY + 'px';
   });
 
-  // 菜单逻辑
+  // 菜单抽屉逻辑
   const menuBtn = document.getElementById('menuBtn');
   const drawer = document.getElementById('drawer');
   const closeDrawer = document.getElementById('closeDrawer');
@@ -443,122 +418,129 @@
   closeDrawer.addEventListener('click', closeDrawerFunc);
   drawer.addEventListener('click', (e) => { if(e.target === drawer) closeDrawerFunc(); });
 
-  // Gallery: 加载图片 - 支持多种路径格式
+  // Gallery 自动滚动 + 悬停停止 + 悬停放大 (css 已包含缩放)
   const galleryContainer = document.getElementById('galleryScroll');
   const photoCount = 8;
-  let loadedCount = 0;
   
-  // 尝试多种可能的路径
-  function tryLoadImage(img, paths, index) {
-    let pathIndex = 0;
+  // 图片加载辅助：尝试多种路径，兼容实际文件名 1.jpg ~ 8.jpg
+  function attemptImageLoad(img, index) {
+    const extensions = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'JPEG'];
+    let attemptIdx = 0;
+    let pathVariants = [];
+    // 基础路径变体
+    const basePaths = [
+      `gallery/${index}`,
+      `./gallery/${index}`,
+      `/gallery/${index}`,
+      `gallery/0${index}`,
+      `gallery/img_${index}`,
+      `gallery/photo${index}`
+    ];
+    for(let bp of basePaths) {
+      for(let ext of extensions) {
+        pathVariants.push(`${bp}.${ext}`);
+      }
+    }
+    // 额外包含常见直接命名的格式
+    pathVariants.push(`gallery/${index}.jpg`, `gallery/${index}.jpeg`, `gallery/${index}.png`);
     
-    function tryNextPath() {
-      if (pathIndex >= paths.length) {
-        // 所有路径都失败了，显示优雅的玻璃占位
-        img.style.background = 'linear-gradient(145deg, #2a3440, #181e26)';
+    function tryNext() {
+      if(attemptIdx >= pathVariants.length) {
+        // 优雅占位
+        img.style.background = 'linear-gradient(135deg, #aa9f8e, #6c5e4e)';
         img.style.minWidth = '180px';
         img.style.height = '280px';
         img.style.objectFit = 'cover';
-        img.alt = `Photo ${index}`;
-        console.log(`❌ 图片 ${index} 加载失败，尝试了所有路径`);
+        img.style.borderRadius = '24px';
+        img.alt = `photo ${index}`;
+        console.warn(`⚠️ 图片 ${index} 未找到，使用占位`);
         return;
       }
-      
-      const currentPath = paths[pathIndex];
-      img.src = currentPath;
-      console.log(`尝试加载图片 ${index}: ${currentPath}`);
-      
+      const srcCandidate = pathVariants[attemptIdx];
+      img.src = srcCandidate;
       img.onload = () => {
-        console.log(`✅ 图片 ${index} 加载成功: ${currentPath}`);
         img.style.background = 'none';
+        console.log(`✅ 图片 ${index} 加载成功: ${srcCandidate}`);
       };
-      
       img.onerror = () => {
-        pathIndex++;
-        tryNextPath();
+        attemptIdx++;
+        tryNext();
       };
     }
-    
-    tryNextPath();
+    tryNext();
   }
   
+  // 创建 8 张 gallery 卡片
   for(let i = 1; i <= photoCount; i++) {
     const card = document.createElement('div');
     card.className = 'gallery-card';
     const img = document.createElement('img');
-    
-    // 多种可能的路径（按优先级排序）
-    const possiblePaths = [
-      `gallery/${i}.jpg`,
-      `gallery/${i}.jpeg`,
-      `gallery/${i}.png`,
-      `gallery/${i}.JPG`,
-      `gallery/${i}.webp`,
-      `./gallery/${i}.jpg`,
-      `./gallery/${i}.jpeg`,
-      `./gallery/${i}.png`,
-      `/gallery/${i}.jpg`,
-      `gallery/0${i}.jpg`,
-      `gallery/img_${i}.jpg`,
-      `gallery/photo${i}.jpg`
-    ];
-    
-    img.alt = `Photo ${i}`;
-    tryLoadImage(img, possiblePaths, i);
-    
+    img.alt = `Gallery ${i}`;
+    attemptImageLoad(img, i);
     card.appendChild(img);
     galleryContainer.appendChild(card);
   }
   
-  // Gallery 悬停停止滚动 + 自动缓速滚动
-  let autoScrollInterval = null;
-  const gallery = document.querySelector('.gallery-scroll');
+  // 自动滚动逻辑 (每3.5秒滑动一段，悬停时完全停止)
+  let autoScrollTimer = null;
+  const galleryScrollDiv = document.querySelector('.gallery-scroll');
   
   function startAutoScroll() {
-    if(autoScrollInterval) clearInterval(autoScrollInterval);
-    autoScrollInterval = setInterval(() => {
-      if(gallery && !gallery.matches(':hover') && !drawer.classList.contains('open')) {
-        const maxScroll = gallery.scrollWidth - gallery.clientWidth;
-        if(gallery.scrollLeft + 10 >= maxScroll) {
-          gallery.scrollTo({ left: 0, behavior: 'smooth' });
+    if(autoScrollTimer) clearInterval(autoScrollTimer);
+    autoScrollTimer = setInterval(() => {
+      // 仅在菜单未打开且鼠标未悬停在 gallery 区域时自动滚动
+      if(!galleryScrollDiv) return;
+      const isHovered = galleryScrollDiv.matches(':hover');
+      const drawerOpen = drawer.classList.contains('open');
+      if(!isHovered && !drawerOpen && galleryScrollDiv) {
+        const maxScroll = galleryScrollDiv.scrollWidth - galleryScrollDiv.clientWidth;
+        const currentLeft = galleryScrollDiv.scrollLeft;
+        const step = 280; // 滚动步长
+        if(currentLeft + step >= maxScroll - 10) {
+          galleryScrollDiv.scrollTo({ left: 0, behavior: 'smooth' });
         } else {
-          gallery.scrollBy({ left: 300, behavior: 'smooth' });
+          galleryScrollDiv.scrollBy({ left: step, behavior: 'smooth' });
         }
       }
-    }, 4000);
+    }, 3600);
   }
   
-  gallery.addEventListener('mouseenter', () => {
-    if(autoScrollInterval) clearInterval(autoScrollInterval);
-    autoScrollInterval = null;
-  });
-  gallery.addEventListener('mouseleave', () => {
-    startAutoScroll();
-  });
+  function stopAutoScroll() {
+    if(autoScrollTimer) {
+      clearInterval(autoScrollTimer);
+      autoScrollTimer = null;
+    }
+  }
   
+  // 悬停时完全停止滚动 + 恢复
+  if(galleryScrollDiv) {
+    galleryScrollDiv.addEventListener('mouseenter', () => {
+      stopAutoScroll();
+    });
+    galleryScrollDiv.addEventListener('mouseleave', () => {
+      startAutoScroll();
+    });
+  }
   startAutoScroll();
   
-  // 差异化气泡呼吸节奏
+  // 差异化气泡呼吸：每个气泡独立的柔浮动
   const bubbles = document.querySelectorAll('.bubble, .bubble-large');
   bubbles.forEach((b, idx) => {
-    const duration = 3.5 + (idx % 4) * 0.6;
-    const delay = (idx * 0.18) % 2.2;
-    b.style.animation = `glassBreathe ${duration}s infinite alternate cubic-bezier(0.33, 1.2, 0.4, 1)`;
+    const duration = 3.2 + (idx % 5) * 0.5;
+    const delay = (idx * 0.2) % 2.4;
+    b.style.animation = `softFloat ${duration}s infinite alternate cubic-bezier(0.2, 1.0, 0.4, 1)`;
     b.style.animationDelay = `${delay}s`;
   });
   
-  // 移动端禁用鼠标光晕
+  // 移动端禁用光晕，保持干净
   if(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    const mouseGlow = document.querySelector('.mouse-glow');
-    if(mouseGlow) mouseGlow.style.display = 'none';
+    const mg = document.querySelector('.mouse-glow');
+    if(mg) mg.style.display = 'none';
   }
   
-  // 控制台输出帮助信息
-  console.log('🔍 图片加载说明：');
-  console.log('📁 请确保 gallery 文件夹与 index.html 在同一目录');
-  console.log('📷 图片命名格式: 1.jpg, 2.jpg, 3.jpg ... 8.jpg');
-  console.log('💡 支持格式: jpg, jpeg, png, webp, JPG');
-  console.log('✨ 如果图片仍无法显示，请检查文件名大小写和扩展名');
+  // 附加: 去除所有玻璃感边框，全局无边框菜单栏，背景完全混合白色+黑色+米棕色模糊背景（CSS已保证）
+  // 确保没有多余的目前 vibecoding 文字
+  console.log('✓ 最终版本: 白色左侧入场 + 混合模糊背景 + 气泡无边框透背景 + Gallery自动滚动悬停放大');
 </script>
 </body>
 </html>
