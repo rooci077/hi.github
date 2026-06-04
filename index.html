@@ -12,7 +12,7 @@
     }
 
     body {
-      background: #efeae2;  /* 基底米白，用于混合 */
+      background: #efeae2;
       font-family: "Arial Rounded MT Bold", "Arial Rounded", "SF Pro Rounded", "PingFang SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       font-weight: 600;
       min-height: 100vh;
@@ -90,7 +90,6 @@
       max-width: 850px;
     }
 
-    /* 白色字体，无玻璃框，从左侧划入 */
     .agent {
       font-size: clamp(3.8rem, 12vw, 6.8rem);
       font-weight: 700;
@@ -125,7 +124,7 @@
       }
     }
 
-    /* 菜单按钮 — 透出背景，无玻璃感，暗化处理 */
+    /* 菜单按钮 — 透出背景，暗化处理 */
     .menu-btn {
       position: fixed;
       top: 32px;
@@ -157,7 +156,7 @@
       transform: scale(0.96);
     }
 
-    /* 抽屉菜单 — 与主页相同背景混合，只是加暗 */
+    /* 抽屉菜单 — 与主页相同背景混合，加暗 */
     .drawer {
       position: fixed;
       top: 0;
@@ -213,23 +212,35 @@
       padding-left: 14px;
     }
 
-    /* GALLERY — 自动滚动 + 悬停停止 + 放大，无拖动栏且无限循环感 */
+    /* GALLERY — 手动滚动，保留滚动条，取消自动滑动 */
     .gallery-scroll {
       display: flex;
       overflow-x: auto;
       gap: 1.6rem;
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
-      padding-bottom: 0.4rem;
-      cursor: default;
-      scrollbar-width: none;  /* 隐藏滚动条 Firefox */
-      -ms-overflow-style: none;
+      padding-bottom: 0.8rem;
+      cursor: grab;
+      /* 显示滚动条，便于手动拖拽/滑动 */
+      scrollbar-width: thin;
+    }
+    .gallery-scroll:active {
+      cursor: grabbing;
     }
     .gallery-scroll::-webkit-scrollbar {
-      display: none;  /* 隐藏滚动条 Chrome/Safari */
+      height: 6px;
+    }
+    .gallery-scroll::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+    .gallery-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 245, 0.5);
+      border-radius: 10px;
     }
     .gallery-card {
       flex: 0 0 auto;
+      width: 260px;
       scroll-snap-align: start;
       border-radius: 28px;
       background: transparent;
@@ -239,14 +250,13 @@
       transform: scale(1.02);
     }
     .gallery-card img {
-      height: 280px;
-      width: auto;
-      max-width: 340px;
-      object-fit: contain;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
       border-radius: 26px;
       display: block;
-      pointer-events: none;
-      background: rgba(20, 18, 16, 0.2);
+      background: rgba(20, 18, 16, 0.3);
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     }
 
@@ -269,7 +279,7 @@
       letter-spacing: 0.3px;
     }
 
-    /* 全新气泡 — 透出背景的模糊文本框，无边框，轻盈呼吸 */
+    /* 气泡 — 透出背景的模糊文本框，无边框，轻盈呼吸 */
     .bubble-world {
       display: flex;
       flex-wrap: wrap;
@@ -327,14 +337,14 @@
       transform: scale(1.05) translateY(-5px);
     }
 
-    /* 去除右下角 now 文字 */
+    /* 去除右下角多余元素 */
     .now-corner {
       display: none;
     }
 
     @media (max-width: 680px) {
       .main { padding: 2rem 1.8rem; }
-      .gallery-card img { height: 200px; }
+      .gallery-card { width: 200px; }
       .drawer { padding: 1.5rem; }
       .bubble { font-size: 0.78rem; padding: 0.5rem 1.2rem; }
     }
@@ -361,7 +371,7 @@
 <div class="drawer" id="drawer">
   <div class="drawer-close" id="closeDrawer">✕</div>
 
-  <!-- Gallery 纯照片滚动，无文字 -->
+  <!-- Gallery 纯照片滚动，手动滚动条 visible，无自动滑动 -->
   <div class="menu-section">
     <div class="menu-section-title">Gallery</div>
     <div class="gallery-scroll" id="galleryScroll"></div>
@@ -375,17 +385,26 @@
     </div>
   </div>
 
-  <!-- My Footage 气泡透背景无边框 -->
+  <!-- My Footage 气泡 —— 更新国家列表：马来西亚，日本，泰国；删除美国以外城市的明细，保留迪拜、哥斯达黎加等 -->
   <div class="menu-section">
     <div class="menu-section-title">My Footage</div>
     <div class="bubble-world">
+      <!-- 主城市保留纽约/西雅图（学历背景） -->
       <div class="bubble-large">New York <span class="school-sub">Columbia University</span></div>
       <div class="bubble-large">Seattle <span class="school-sub">University of Washington</span></div>
-      <div class="bubble">Las Vegas, NV</div><div class="bubble">Orlando, FL</div>
-      <div class="bubble">Los Angeles, CA</div><div class="bubble">Portland, OR</div>
-      <div class="bubble">Page, AZ</div><div class="bubble">Fairbanks, AK</div>
+      <!-- 美国境内其他城市（保留简洁感） -->
+      <div class="bubble">Las Vegas, NV</div>
+      <div class="bubble">Orlando, FL</div>
+      <div class="bubble">Los Angeles, CA</div>
+      <div class="bubble">Portland, OR</div>
+      <div class="bubble">Page, AZ</div>
+      <div class="bubble">Fairbanks, AK</div>
+      <!-- 国际：只保留 Dubai，Costa Rica (按要求删除其他国家的城市细节) 新增马来西亚 日本 泰国 -->
+      <div class="bubble">🇦🇪 Dubai, UAE</div>
       <div class="bubble">🇨🇷 Costa Rica · La Fortuna & Monteverde</div>
-      <div class="bubble">🇰🇪 Kenya · Nairobi</div><div class="bubble">🇦🇪 UAE · Dubai</div>
+      <div class="bubble">🇲🇾 Malaysia</div>
+      <div class="bubble">🇯🇵 Japan</div>
+      <div class="bubble">🇹🇭 Thailand</div>
     </div>
   </div>
 
@@ -418,46 +437,71 @@
   closeDrawer.addEventListener('click', closeDrawerFunc);
   drawer.addEventListener('click', (e) => { if(e.target === drawer) closeDrawerFunc(); });
 
-  // Gallery 自动滚动 (增强版: 平滑无限循环风格，悬停停止)
+  // Gallery: 手动滚动，无自动滑动。删除6.jpg 意味着照片序列为 1,2,3,4,5,7,8 (共7张)
   const galleryContainer = document.getElementById('galleryScroll');
-  const photoCount = 8;
+  // 照片索引: 1,2,3,4,5,7,8  (跳过6)
+  const photoIndices = [1, 2, 3, 4, 5, 7, 8];
+  const photoCount = photoIndices.length;
   
-  // 图片加载辅助：尝试多种路径，兼容实际文件名 1.jpg ~ 8.jpg
-  function attemptImageLoad(img, index) {
+  // 辅助：加载图片并尝试多种扩展名，优雅降级
+  function attemptImageLoad(img, indexNum) {
     const extensions = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'JPEG'];
     let attemptIdx = 0;
     let pathVariants = [];
     const basePaths = [
-      `gallery/${index}`,
-      `./gallery/${index}`,
-      `/gallery/${index}`,
-      `gallery/0${index}`,
-      `gallery/img_${index}`,
-      `gallery/photo${index}`
+      `gallery/${indexNum}`,
+      `./gallery/${indexNum}`,
+      `/gallery/${indexNum}`,
+      `gallery/0${indexNum}`,
+      `gallery/img_${indexNum}`,
+      `gallery/photo${indexNum}`
     ];
     for(let bp of basePaths) {
       for(let ext of extensions) {
         pathVariants.push(`${bp}.${ext}`);
       }
     }
-    pathVariants.push(`gallery/${index}.jpg`, `gallery/${index}.jpeg`, `gallery/${index}.png`);
+    // 额外加入常见的直接命名
+    pathVariants.push(`gallery/${indexNum}.jpg`, `gallery/${indexNum}.jpeg`, `gallery/${indexNum}.png`);
     
     function tryNext() {
       if(attemptIdx >= pathVariants.length) {
-        img.style.background = 'linear-gradient(135deg, #aa9f8e, #6c5e4e)';
-        img.style.minWidth = '180px';
-        img.style.height = '280px';
+        // 优雅占位：玻璃质感背景 + 编号
+        img.style.background = 'linear-gradient(135deg, #9b8e7a, #5f5242)';
         img.style.objectFit = 'cover';
         img.style.borderRadius = '24px';
-        img.alt = `photo ${index}`;
-        console.warn(`⚠️ 图片 ${index} 未找到，使用占位`);
+        img.alt = `photo ${indexNum}`;
+        // 添加可视编号（通过伪元素不易，直接修改img父级添加文本层）
+        const parentCard = img.closest('.gallery-card');
+        if(parentCard && !parentCard.querySelector('.photo-placeholder-num')) {
+          const numSpan = document.createElement('div');
+          numSpan.className = 'photo-placeholder-num';
+          numSpan.innerText = `${indexNum}`;
+          numSpan.style.position = 'absolute';
+          numSpan.style.bottom = '12px';
+          numSpan.style.right = '16px';
+          numSpan.style.color = 'rgba(255,245,230,0.9)';
+          numSpan.style.fontSize = '1.2rem';
+          numSpan.style.fontWeight = 'bold';
+          numSpan.style.textShadow = '0 1px 4px black';
+          numSpan.style.zIndex = '2';
+          parentCard.style.position = 'relative';
+          parentCard.appendChild(numSpan);
+        }
+        console.warn(`⚠️ 图片 ${indexNum} 未找到，使用占位`);
         return;
       }
       const srcCandidate = pathVariants[attemptIdx];
       img.src = srcCandidate;
       img.onload = () => {
         img.style.background = 'none';
-        console.log(`✅ 图片 ${index} 加载成功: ${srcCandidate}`);
+        console.log(`✅ 图片 ${indexNum} 加载成功: ${srcCandidate}`);
+        // 清除可能存在的占位数字
+        const parentCard = img.closest('.gallery-card');
+        if(parentCard) {
+          const existingNum = parentCard.querySelector('.photo-placeholder-num');
+          if(existingNum) existingNum.remove();
+        }
       };
       img.onerror = () => {
         attemptIdx++;
@@ -467,122 +511,50 @@
     tryNext();
   }
   
-  // 创建 8 张 gallery 卡片
-  for(let i = 1; i <= photoCount; i++) {
+  // 创建所有 gallery 卡片 (跳过6)
+  for(let idx = 0; idx < photoCount; idx++) {
+    const num = photoIndices[idx];
     const card = document.createElement('div');
     card.className = 'gallery-card';
     const img = document.createElement('img');
-    img.alt = `Gallery ${i}`;
-    attemptImageLoad(img, i);
+    img.alt = `Gallery ${num}`;
+    attemptImageLoad(img, num);
     card.appendChild(img);
     galleryContainer.appendChild(card);
   }
   
-  // ----- 增强自动滚动逻辑 (更流畅，悬停停止，离开恢复，且滚动间距自然) -----
-  let autoScrollTimer = null;
-  let isAutoScrollingEnabled = true;
+  // 手动滚动交互增强：允许鼠标拖拽滚动（更自然）
   const galleryScrollDiv = document.querySelector('.gallery-scroll');
-  
-  // 滚动到下一张 (平滑移动，基于卡片宽度+gap)
-  function scrollToNextImage() {
-    if (!galleryScrollDiv || !isAutoScrollingEnabled) return;
-    // 检查鼠标是否真的悬停在gallery区域或抽屉打开 —— 额外确保
-    const isHovered = galleryScrollDiv.matches(':hover');
-    const drawerOpen = drawer.classList.contains('open');
-    if (isHovered || drawerOpen) return;
-    
-    const cardWidth = document.querySelector('.gallery-card')?.offsetWidth || 240;
-    const gap = 26; // 与CSS gap一致 1.6rem ≈ 25.6px
-    const scrollAmount = cardWidth + gap;
-    const currentScroll = galleryScrollDiv.scrollLeft;
-    const maxScroll = galleryScrollDiv.scrollWidth - galleryScrollDiv.clientWidth;
-    
-    let targetScroll = currentScroll + scrollAmount;
-    if (targetScroll >= maxScroll - 10) {
-      // 到达末尾，优雅跳回开头 (瞬间跳转无感再平滑移动，但为了体验，瞬间回0再平滑到第一张)
-      galleryScrollDiv.scrollTo({ left: 0, behavior: 'auto' });
-      // 微延迟后再次触发平滑保证连续感
-      setTimeout(() => {
-        if (!isAutoScrollingEnabled) return;
-        galleryScrollDiv.scrollTo({ left: 0, behavior: 'smooth' });
-      }, 20);
-    } else {
-      galleryScrollDiv.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
-  }
-  
-  function startAutoScroll() {
-    if (autoScrollTimer) clearInterval(autoScrollTimer);
-    isAutoScrollingEnabled = true;
-    // 每 3.2 秒滚动一次，缓动舒适
-    autoScrollTimer = setInterval(() => {
-      if (!galleryScrollDiv) return;
-      const isHovered = galleryScrollDiv.matches(':hover');
-      const drawerOpen = drawer.classList.contains('open');
-      if (!isHovered && !drawerOpen && isAutoScrollingEnabled) {
-        scrollToNextImage();
-      }
-    }, 3200);
-  }
-  
-  function stopAutoScroll() {
-    if (autoScrollTimer) {
-      clearInterval(autoScrollTimer);
-      autoScrollTimer = null;
-    }
-    isAutoScrollingEnabled = false;
-  }
-  
-  // 悬停时 完全停止滚动；离开后重新启动
-  if (galleryScrollDiv) {
-    galleryScrollDiv.addEventListener('mouseenter', () => {
-      // 停止所有自动滚动行为
-      if (autoScrollTimer) {
-        clearInterval(autoScrollTimer);
-        autoScrollTimer = null;
-      }
-      isAutoScrollingEnabled = false;
+  let isDown = false;
+  let startX;
+  let scrollLeftStart;
+  if(galleryScrollDiv) {
+    galleryScrollDiv.addEventListener('mousedown', (e) => {
+      isDown = true;
+      galleryScrollDiv.style.cursor = 'grabbing';
+      startX = e.pageX - galleryScrollDiv.offsetLeft;
+      scrollLeftStart = galleryScrollDiv.scrollLeft;
     });
     galleryScrollDiv.addEventListener('mouseleave', () => {
-      // 重新开启自动滚动
-      isAutoScrollingEnabled = true;
-      if (autoScrollTimer) clearInterval(autoScrollTimer);
-      autoScrollTimer = setInterval(() => {
-        if (!galleryScrollDiv) return;
-        const isHoveredNow = galleryScrollDiv.matches(':hover');
-        const drawerOpen = drawer.classList.contains('open');
-        if (!isHoveredNow && !drawerOpen && isAutoScrollingEnabled) {
-          scrollToNextImage();
-        }
-      }, 3200);
+      isDown = false;
+      galleryScrollDiv.style.cursor = 'grab';
     });
+    galleryScrollDiv.addEventListener('mouseup', () => {
+      isDown = false;
+      galleryScrollDiv.style.cursor = 'grab';
+    });
+    galleryScrollDiv.addEventListener('mousemove', (e) => {
+      if(!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - galleryScrollDiv.offsetLeft;
+      const walk = (x - startX) * 1.2;
+      galleryScrollDiv.scrollLeft = scrollLeftStart - walk;
+    });
+    // 确保初始光标
+    galleryScrollDiv.style.cursor = 'grab';
   }
   
-  // 初始化自动滚动
-  startAutoScroll();
-  
-  // 可选：当抽屉打开时暂停自动滚动，关闭后恢复（更好的体验）
-  const observer = new MutationObserver(() => {
-    if (drawer.classList.contains('open')) {
-      if (autoScrollTimer) clearInterval(autoScrollTimer);
-      isAutoScrollingEnabled = false;
-    } else {
-      if (!galleryScrollDiv?.matches(':hover')) {
-        isAutoScrollingEnabled = true;
-        if (autoScrollTimer) clearInterval(autoScrollTimer);
-        autoScrollTimer = setInterval(() => {
-          if (!galleryScrollDiv) return;
-          const hoverNow = galleryScrollDiv.matches(':hover');
-          if (!hoverNow && !drawer.classList.contains('open') && isAutoScrollingEnabled) {
-            scrollToNextImage();
-          }
-        }, 3200);
-      }
-    }
-  });
-  observer.observe(drawer, { attributes: true, attributeFilter: ['class'] });
-  
-  // 差异化气泡呼吸：每个气泡独立的柔浮动
+  // 差异化气泡呼吸
   const bubbles = document.querySelectorAll('.bubble, .bubble-large');
   bubbles.forEach((b, idx) => {
     const duration = 3.2 + (idx % 5) * 0.5;
@@ -591,14 +563,15 @@
     b.style.animationDelay = `${delay}s`;
   });
   
-  // 移动端禁用光晕，保持干净
+  // 移动端禁用光晕
   if(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
     const mg = document.querySelector('.mouse-glow');
     if(mg) mg.style.display = 'none';
   }
   
-  // 控制台友好提示
-  console.log('✓ Gallery 增强自动滚动已启用（悬停暂停，离开自动滚动，无限循环质感）');
+  // 控制台输出确认更改内容
+  console.log('✓ 改动已应用: Gallery恢复滚动条 + 取消自动滑动 | 删除6.jpg (照片序列1-5,7,8)');
+  console.log('✓ My Footage 更新: 新增马来西亚,日本,泰国；删除其他国家城市细节，保留迪拜和哥斯达黎加');
 </script>
 </body>
 </html>
