@@ -213,7 +213,7 @@
       padding-left: 14px;
     }
 
-    /* GALLERY — 自动滚动 + 悬停停止 + 放大，无拖动栏 */
+    /* GALLERY — 自动滚动 + 悬停停止 + 放大，无拖动栏且无限循环感 */
     .gallery-scroll {
       display: flex;
       overflow-x: auto;
@@ -418,7 +418,7 @@
   closeDrawer.addEventListener('click', closeDrawerFunc);
   drawer.addEventListener('click', (e) => { if(e.target === drawer) closeDrawerFunc(); });
 
-  // Gallery 自动滚动 + 悬停停止 + 悬停放大 (css 已包含缩放)
+  // Gallery 自动滚动 (增强版: 平滑无限循环风格，悬停停止)
   const galleryContainer = document.getElementById('galleryScroll');
   const photoCount = 8;
   
@@ -427,7 +427,6 @@
     const extensions = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'JPEG'];
     let attemptIdx = 0;
     let pathVariants = [];
-    // 基础路径变体
     const basePaths = [
       `gallery/${index}`,
       `./gallery/${index}`,
@@ -441,12 +440,10 @@
         pathVariants.push(`${bp}.${ext}`);
       }
     }
-    // 额外包含常见直接命名的格式
     pathVariants.push(`gallery/${index}.jpg`, `gallery/${index}.jpeg`, `gallery/${index}.png`);
     
     function tryNext() {
       if(attemptIdx >= pathVariants.length) {
-        // 优雅占位
         img.style.background = 'linear-gradient(135deg, #aa9f8e, #6c5e4e)';
         img.style.minWidth = '180px';
         img.style.height = '280px';
@@ -481,47 +478,109 @@
     galleryContainer.appendChild(card);
   }
   
-  // 自动滚动逻辑 (每3.5秒滑动一段，悬停时完全停止)
+  // ----- 增强自动滚动逻辑 (更流畅，悬停停止，离开恢复，且滚动间距自然) -----
   let autoScrollTimer = null;
+  let isAutoScrollingEnabled = true;
   const galleryScrollDiv = document.querySelector('.gallery-scroll');
   
-  function startAutoScroll() {
-    if(autoScrollTimer) clearInterval(autoScrollTimer);
-    autoScrollTimer = setInterval(() => {
-      // 仅在菜单未打开且鼠标未悬停在 gallery 区域时自动滚动
-      if(!galleryScrollDiv) return;
-      const isHovered = galleryScrollDiv.matches(':hover');
-      const drawerOpen = drawer.classList.contains('open');
-      if(!isHovered && !drawerOpen && galleryScrollDiv) {
-        const maxScroll = galleryScrollDiv.scrollWidth - galleryScrollDiv.clientWidth;
-        const currentLeft = galleryScrollDiv.scrollLeft;
-        const step = 280; // 滚动步长
-        if(currentLeft + step >= maxScroll - 10) {
-          galleryScrollDiv.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          galleryScrollDiv.scrollBy({ left: step, behavior: 'smooth' });
-        }
-      }
-    }, 3600);
-  }
-  
-  function stopAutoScroll() {
-    if(autoScrollTimer) {
-      clearInterval(autoScrollTimer);
-      autoScrollTimer = null;
+  // 滚动到下一张 (平滑移动，基于卡片宽度+gap)
+  function scrollToNextImage() {
+    if (!galleryScrollDiv || !isAutoScrollingEnabled) return;
+    // 检查鼠标是否真的悬停在gallery区域或抽屉打开 —— 额外确保
+    const isHovered = galleryScrollDiv.matches(':hover');
+    const drawerOpen = drawer.classList.contains('open');
+    if (isHovered || drawerOpen) return;
+    
+    const cardWidth = document.querySelector('.gallery-card')?.offsetWidth || 240;
+    const gap = 26; // 与CSS gap一致 1.6rem ≈ 25.6px
+    const scrollAmount = cardWidth + gap;
+    const currentScroll = galleryScrollDiv.scrollLeft;
+    const maxScroll = galleryScrollDiv.scrollWidth - galleryScrollDiv.clientWidth;
+    
+    let targetScroll = currentScroll + scrollAmount;
+    if (targetScroll >= maxScroll - 10) {
+      // 到达末尾，优雅跳回开头 (瞬间跳转无感再平滑移动，但为了体验，瞬间回0再平滑到第一张)
+      galleryScrollDiv.scrollTo({ left: 0, behavior: 'auto' });
+      // 微延迟后再次触发平滑保证连续感
+      setTimeout(() => {
+        if (!isAutoScrollingEnabled) return;
+        galleryScrollDiv.scrollTo({ left: 0, behavior: 'smooth' });
+      }, 20);
+    } else {
+      galleryScrollDiv.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   }
   
-  // 悬停时完全停止滚动 + 恢复
-  if(galleryScrollDiv) {
+  function startAutoScroll() {
+    if (autoScrollTimer) clearInterval(autoScrollTimer);
+    isAutoScrollingEnabled = true;
+    // 每 3.2 秒滚动一次，缓动舒适
+    autoScrollTimer = setInterval(() => {
+      if (!galleryScrollDiv) return;
+      const isHovered = galleryScrollDiv.matches(':hover');
+      const drawerOpen = drawer.classList.contains('open');
+      if (!isHovered && !drawerOpen && isAutoScrollingEnabled) {
+        scrollToNextImage();
+      }
+    }, 3200);
+  }
+  
+  function stopAutoScroll() {
+    if (autoScrollTimer) {
+      clearInterval(autoScrollTimer);
+      autoScrollTimer = null;
+    }
+    isAutoScrollingEnabled = false;
+  }
+  
+  // 悬停时 完全停止滚动；离开后重新启动
+  if (galleryScrollDiv) {
     galleryScrollDiv.addEventListener('mouseenter', () => {
-      stopAutoScroll();
+      // 停止所有自动滚动行为
+      if (autoScrollTimer) {
+        clearInterval(autoScrollTimer);
+        autoScrollTimer = null;
+      }
+      isAutoScrollingEnabled = false;
     });
     galleryScrollDiv.addEventListener('mouseleave', () => {
-      startAutoScroll();
+      // 重新开启自动滚动
+      isAutoScrollingEnabled = true;
+      if (autoScrollTimer) clearInterval(autoScrollTimer);
+      autoScrollTimer = setInterval(() => {
+        if (!galleryScrollDiv) return;
+        const isHoveredNow = galleryScrollDiv.matches(':hover');
+        const drawerOpen = drawer.classList.contains('open');
+        if (!isHoveredNow && !drawerOpen && isAutoScrollingEnabled) {
+          scrollToNextImage();
+        }
+      }, 3200);
     });
   }
+  
+  // 初始化自动滚动
   startAutoScroll();
+  
+  // 可选：当抽屉打开时暂停自动滚动，关闭后恢复（更好的体验）
+  const observer = new MutationObserver(() => {
+    if (drawer.classList.contains('open')) {
+      if (autoScrollTimer) clearInterval(autoScrollTimer);
+      isAutoScrollingEnabled = false;
+    } else {
+      if (!galleryScrollDiv?.matches(':hover')) {
+        isAutoScrollingEnabled = true;
+        if (autoScrollTimer) clearInterval(autoScrollTimer);
+        autoScrollTimer = setInterval(() => {
+          if (!galleryScrollDiv) return;
+          const hoverNow = galleryScrollDiv.matches(':hover');
+          if (!hoverNow && !drawer.classList.contains('open') && isAutoScrollingEnabled) {
+            scrollToNextImage();
+          }
+        }, 3200);
+      }
+    }
+  });
+  observer.observe(drawer, { attributes: true, attributeFilter: ['class'] });
   
   // 差异化气泡呼吸：每个气泡独立的柔浮动
   const bubbles = document.querySelectorAll('.bubble, .bubble-large');
@@ -538,9 +597,8 @@
     if(mg) mg.style.display = 'none';
   }
   
-  // 附加: 去除所有玻璃感边框，全局无边框菜单栏，背景完全混合白色+黑色+米棕色模糊背景（CSS已保证）
-  // 确保没有多余的目前 vibecoding 文字
-  console.log('✓ 最终版本: 白色左侧入场 + 混合模糊背景 + 气泡无边框透背景 + Gallery自动滚动悬停放大');
+  // 控制台友好提示
+  console.log('✓ Gallery 增强自动滚动已启用（悬停暂停，离开自动滚动，无限循环质感）');
 </script>
 </body>
 </html>
